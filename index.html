@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2000s CHARACTERS</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Galmuri9', sans-serif;
+        background: #f1f3f2;
+        color: #333;
+    }
+
+    .topbar {
+        background: linear-gradient(to bottom, #ddeeff, #10c6b3);
+        border-bottom: 2px solid #6699cc;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+    }
+    .topbar .logo {
+        font-size: 25px;
+        font-weight: 600;
+        color: #336699;
+        font-family: 'Galmuri9', sans-serif;
+        font-style: normal;
+        padding: 0;
+        text-decoration: none;
+        line-height: 1.2;
+        letter-spacing: -1px;
+    }
+
+    .grid-wrap {
+        max-width: 1200px;
+        margin: 16px auto;
+        padding: 0 14px;
+    }
+    .char-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+    
+    }
+    .char-cell {
+        position: relative;
+        aspect-ratio: 1;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        overflow: hidden;
+        transition: background 0.3s ease;
+    }
+    .char-cell:hover { filter: brightness(0.96); }
+    .char-cell.seen { color: #fff; }
+    .char-cell .char-label {
+        font-size: 11px;
+        text-align: center;
+        padding: 4px;
+        word-break: keep-all;
+        z-index: 2;
+        font-family: 'Galmuri9', sans-serif;
+    }
+    .char-cell.seen .char-label { color: #fff; }
+    .char-cell img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0; left: 0;
+    }
+
+    .char-lightbox {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.85);
+        z-index: 999;
+        align-items: center;
+        justify-content: center;
+        cursor: zoom-out;
+    }
+    .char-lightbox.active { display: flex; }
+    .lb-box {
+        width: 280px;
+        height: 280px;
+        border: 4px solid #fff;
+        border-radius: 4px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+    .lb-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .char-lightbox .lb-name {
+        position: absolute;
+        bottom: 6%;
+        color: #fff;
+        font-size: 16px;
+        background: rgba(0,0,0,0.5);
+        padding: 6px 16px;
+        border-radius: 4px;
+    }
+
+    @media (max-width: 900px) {
+        .char-grid { grid-template-columns: repeat(5, 1fr); }
+        .char-cell .char-label { font-size: 9px; }
+    }
+    @media (max-width: 600px) {
+        .char-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 420px) {
+        .char-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .footer {
+        text-align: center;
+        font-size: 10px;
+        color: #888;
+        margin: 16px 0 14px;
+        padding-top: 6px;
+    }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">2000년대 캐릭터</div>
+</div>
+
+<div class="grid-wrap">
+    <div class="char-grid" id="charGrid"></div>
+</div>
+
+<div class="char-lightbox" id="charLightbox">
+    <div class="lb-box">
+        <img id="charLightboxImg" src="" alt="">
+    </div>
+    <div class="lb-name" id="charLightboxName"></div>
+</div>
+
+<script>
+    const characters = [
+        { id: "zollaman",     name: "졸라맨",        type: "page",  href: "zollaman.html",     color: "#3cb6e9", img: "jollaman.png" },
+        { id: "woobi-boy",    name: "우비소년",       type: "page",  href: "woobi-boy.html",    color: "#3cb6e9", img: "woobiboy.png" },
+        { id: "ddalki",       name: "딸기",          type: "page",  href: "ddalki.html",       color: "#3cb6e9", img: "ddalki.png" },
+        { id: "congcong",     name: "콩콩이",          type: "page",  href: "congcong.html",     color: "#3cb6e9", img: "congcong.png" },
+        { id: "sue",          name: "슈",            type: "page",  href: "sue.html",          color: "#3cb6e9", img: "sue.png" },
+        { id: "pucca",        name: "뿌까",          type: "page",  href: "pucca.html",        color: "#3cb6e9", img: "pucca.png" },
+        { id: "mashimaro",    name: "마시마로",       type: "page",  href: "mashimaro.html",    color: "#ee5dd8", img: "mashimaro.jpg" },
+        { id: "bluebear",     name: "블루베어",       type: "page",  href: "bluebear.html",     color: "#ee5dd8", img: "bluebear.png" },
+        { id: "bboong",       name: "뿡뿡이",          type: "page",  href: "bboong.html",       color: "#e4e80c", img: "bboong.png" },
+        { id: "gamjadori",    name: "감자도리",       type: "page",  href: "gamjadori.html",    color: "#e4e80c", img: "gamjadori.png" },
+        { id: "holeman",      name: "홀맨",          type: "page",  href: "holeman.html",      color: "#e4e80c", img: "holeman.jpeg" },
+        { id: "koongya",      name: "양파쿵야",          type: "page",  href: "koongya.html",      color: "#e4e80c", img: "yangpakkungya.webp" },
+        { id: "mongyi",       name: "몽이",          type: "page",  href: "mongyi.html",       color: "#e4e80c", img: "mongyi.jpeg" },
+         { id: "zollagirl",    name: "졸라걸",        type: "photo", img: "jollagirl.webp",    color: "#6de5f2" },
+        { id: "kkotnimi",     name: "꽃님이",        type: "photo", img: "ggotnimyi.png", color: "#6de5f2" },
+
+        { id: "baetsal",      name: "뱃살공주",      type: "photo", img: "batsalgongjoo.png", color: "#6de5f2" },
+        { id: "otagun",       name: "오타군",        type: "photo", img: "otagun.png", color: "#6de5f2" },
+        
+        { id: "elbisu",       name: "엘비수",        type: "photo", img: "elbisoo.png",     color: "#6de5f2" },
+        
+        { id: "ttobe",        name: "또베",          type: "photo", img: "ddobae.png",       color: "#6de5f2" },
+        { id: "ria",          name: "리아",          type: "photo", img: "lia.webp",       color: "#6de5f2" },
+        { id: "ringring",     name: "링링",          type: "photo", img: "lingling.png",       color: "#6de5f2" },
+        { id: "miza",         name: "미자",          type: "photo", img: "mija.png",       color: "#6de5f2" },
+        { id: "buddaking",    name: "빠다킹",        type: "photo", img: "butterking.png",     color: "#6de5f2" },
+        { id: "bin",          name: "빈",            type: "photo", img: "bin.webp",         color: "#6de5f2" },
+        { id: "ppungdosa",    name: "뻥도사",        type: "photo", img: "bbungdosa.png", color: "#6de5f2" },
+        { id: "soso",         name: "소소",          type: "photo", img: "soso.png",       color: "#6de5f2" },
+        { id: "slowppaeteru", name: "슬로우빠떼루",   type: "photo", img: "slowbbataeru.png", color: "#6de5f2" },
+        { id: "abyo",         name: "아뵤",          type: "photo", img: "soohi.tiff",       color: "#6de5f2" },
+        { id: "uwo",          name: "우워",          type: "photo", img: "uwo.png",       color: "#6de5f2" },
+        { id: "jangttung",    name: "장뚱",          type: "photo", img: "jangddong.png",       color: "#6de5f2" },
+        { id: "chohee",       name: "초희",          type: "photo", img: "chohee.webp",      color: "#6de5f2" },
+        { id: "ching",        name: "칭",            type: "photo", img: "ching.png",         color: "#6de5f2" },
+        { id: "hoo",          name: "호오",          type: "photo", img: "hoe.png",       color: "#6de5f2" },
+        { id: "koonghoman",   name: "쿵후맨",        type: "photo", img: "koonghooman.png",     color: "#6de5f2" },
+        { id: "joldolddol",   name: "졸라똘똘이",    type: "photo", img: "jolladdolddol.png", color: "#6de5f2" },
+        { id: "gundalf",      name: "건달프",        type: "photo", img: "gundalf.png",     color: "#6de5f2" },
+        { id: "gguja",        name: "꾸자",          type: "photo", img: "gguja.png",       color: "#6de5f2" },
+        { id: "doogunman",    name: "두건맨",        type: "photo", img: "doogunman.png",     color: "#6de5f2" },
+
+        
+        { id: "pakpaksa",     name: "박박사",        type: "photo", img: "pakpaksa.png",     color: "#6de5f2" },
+        
+        
+        { id: "soobak",       name: "수박",          type: "photo", img: "soobak.png",       color: "#6de5f2" },
+        
+        
+        
+        
+        { id: "ddolbam",      name: "똘밤",          type: "photo", img: "ddolbam.png",      color: "#6de5f2" },
+        { id: "ddongchimi",   name: "똥치미",        type: "photo", img: "ddongchimi.png",   color: "#6de5f2" },
+        { id: "garu",         name: "가루",          type: "photo", img: "garu.png",         color: "#6de5f2" },
+        
+        { id: "jolilreo",     name: "졸릴레오박사",      type: "photo", img: "jolilreo.webp",    color: "#6de5f2" },
+        { id: "jollasamchongsa", name: "졸라삼총사", type: "photo", img: "jollasamchongsa.webp", color: "#6de5f2" },
+        { id: "jollasatgat",  name: "졸라삿갓",      type: "photo", img: "jollasatgat.webp", color: "#6de5f2" },
+        
+        { id: "lemon",        name: "레몬",          type: "photo", img: "lemon.png",        color: "#6de5f2" },
+
+        { id: "gamjacoco",    name: "감자코코",       type: "photo", img: "gamjacoco.png",    color: "#efacfb" },
+        { id: "pinkbear",     name: "핑크베어",      type: "photo", img: "pinkbear.png",   color: "#efacfb" },
+        { id: "mel",          name: "메에로",        type: "photo", img: "maero.png",     color: "#efacfb" },
+        { id: "nn",           name: "눈누",          type: "photo", img: "noonnoo.png",       color: "#efacfb" },
+        { id: "ppyak",        name: "뺙이",          type: "photo", img: "bbyak.png",       color: "#efacfb" },
+
+        { id: "tody",         name: "토디",          type: "photo", img: "tody.png",       color: "#efacfb" },
+        { id: "pista",        name: "피스타",        type: "photo", img: "pista.png",        color: "#efacfb" },
+        { id: "piyoz",        name: "피요즈",        type: "photo", img: "piyoz.png",        color: "#efacfb" },
+        { id: "bugaloo",      name: "부갈루",        type: "photo", img: "bugaloo.png",      color: "#efacfb" },
+        { id: "dangdong",     name: "당동",          type: "photo", img: "dangdong.png",     color: "#efacfb" },
+        { id: "jollayiho",    name: "졸라2호",      type: "photo", img: "jollayiho.webp",   color: "#efacfb" },
+
+        { id: "obagungju",    name: "오바공주",      type: "photo", img: "obagungju.png",    color: "#e8f386" },
+{ id: "sll",          name: "샐러리쿵야",            type: "photo", img: "sll.webp",         color: "#e8f386" },
+{ id: "wankye",       name: "완계쿵야",          type: "photo", img: "wankye.webp",      color: "#e8f386" },
+        { id: "bankye",       name: "반계쿵야",          type: "photo", img: "bankye.webp",      color: "#e8f386" },
+{ id: "blackhole",    name: "블랙홀",        type: "photo", img: "blackhole.jpeg",   color: "#e8f386" },
+        
+        { id: "busut",        name: "버섯쿵야",          type: "photo", img: "busut.webp",       color: "#e8f386" },
+{ id: "holecat",      name: "홀캣",          type: "photo", img: "holecat.jpeg",     color: "#e8f386" },
+        { id: "holedog",      name: "홀독",          type: "photo", img: "holedog.jpeg",     color: "#e8f386" },
+{ id: "joomukbap",    name: "주먹밥쿵야",        type: "photo", img: "joomukbap.webp",   color: "#e8f386" },
+    ];
+
+    const STORAGE_KEY = "char_seen_v1";
+
+    function getSeen() {
+        try {
+            return JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function markSeen(id) {
+        const seen = getSeen();
+        seen[id] = true;
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(seen));
+    }
+
+    function renderCharGrid() {
+        const grid = document.getElementById('charGrid');
+        grid.innerHTML = "";
+        const seen = getSeen();
+
+        characters.forEach(ch => {
+            const cell = document.createElement('div');
+            cell.className = 'char-cell';
+
+            if (seen[ch.id]) {
+                cell.classList.add('seen');
+                cell.style.background = ch.color || '#a98ce0';
+            }
+
+            const label = document.createElement('div');
+            label.className = 'char-label';
+            label.textContent = ch.name;
+            cell.appendChild(label);
+
+            cell.addEventListener('click', () => {
+                markSeen(ch.id);
+                if (ch.type === 'page') {
+                    renderCharGrid();
+                    setTimeout(() => {
+                        window.location.href = ch.href;
+                    }, 100);
+                } else {
+                    openCharLightbox(ch);
+                    renderCharGrid();
+                }
+            });
+
+            grid.appendChild(cell);
+        });
+    }
+
+    function openCharLightbox(ch) {
+        const lb = document.getElementById('charLightbox');
+        const img = document.getElementById('charLightboxImg');
+        const name = document.getElementById('charLightboxName');
+        img.src = ch.img;
+        img.alt = ch.name;
+        name.textContent = ch.name;
+        lb.classList.add('active');
+    }
+
+    document.getElementById('charLightbox').addEventListener('click', () => {
+        document.getElementById('charLightbox').classList.remove('active');
+    });
+
+    renderCharGrid();
+</script>
+
+<div class="footer">
+    DESIGN net 2002/1 Vol.52
+</div>
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>양파쿵야's Profile | object-based</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Galmuri9', sans-serif;
+            background-color: #efefef;
+            font-size: 12px;
+            color: #333;
+        }
+
+        a { color: #6699cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .topbar {
+            background: linear-gradient(to bottom, #ddeeff, #10c6b3);
+            border-bottom: 2px solid #6699cc;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .topbar .logo {
+            font-size: 20px; font-weight: bold; color: #336699;
+            font-family: "Cormorant Garamond", serif;
+            padding: 2px 15px;
+            font-style: italic;
+            font-size: 35px;
+            font-weight: 600;
+            text-decoration: none;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+        .topbar .back-btn {
+            font-size: 11px; background: #6699cc; color: white; border: none;
+            padding: 4px 12px; cursor: pointer; text-decoration: none;
+            display: inline-block; border-radius: 4px;
+        }
+        .topbar .back-btn:hover { background: #4477aa; text-decoration: none; }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 14px auto;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            gap: 14px;
+        }
+
+        .left-col { width: 220px; flex-shrink: 0; }
+        
+        /* 오른쪽 2단 */
+        .right-wrap { flex: 1; min-width: 0; display: flex; gap: 14px; }
+        .mid-col { flex: 1; min-width: 0; }
+        .far-col { width: 220px; flex-shrink: 0; }
+
+        .profile-name { font-size: 25px; font-weight: bold; color: #336699; margin-bottom: 8px; font-family: Georgia, serif; }
+
+        .profile-pic {
+            border: 2px solid #6699cc; border-radius: 3px;
+            background: #f0f8ff; display: flex;
+            justify-content: center; align-items: center;
+            height: 220px; margin-bottom: 8px;
+            animation: sway 8s ease-in-out infinite;
+            transform-origin: top center;
+            overflow: hidden;
+        }
+        .profile-pic img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .stick-figure { animation: float 3s ease-in-out infinite; }
+        @keyframes sway {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .status-quote {
+            font-style: italic; font-size: 11px; color: #555;
+            background: #f0f8ff; border-left: 3px solid #6699cc;
+            border-radius: 0 2px 2px 0; padding: 6px 9px; margin-bottom: 8px;
+        }
+
+        .online-dot { width: 8px; height: 8px; background: #44cc44; border-radius: 50%; display: inline-block; margin-right: 4px; }
+        .meta-line { font-size: 10px; color: #555; margin-bottom: 3px; }
+
+        .box {
+            border: 1px solid #10c6b3; margin-bottom: 12px; border-radius: 3px; overflow: hidden;
+            animation: sway 6s ease-in-out infinite;
+            transform-origin: top center;
+        }
+        .box:nth-child(2n) { animation-duration: 7s; animation-delay: -1.5s; }
+        .box:nth-child(3n) { animation-duration: 5.5s; animation-delay: -3s; }
+        .box:nth-child(4n) { animation-duration: 6.5s; animation-delay: -2s; }
+        .box:nth-child(5n) { animation-duration: 7.5s; animation-delay: -4s; }
+
+        @keyframes sway {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .box-header { background: #10c6b3; color: white; padding: 6px 9px; font-weight: bold; font-size: 11px; }
+        .box-header a { color: #e0fff9; font-weight: normal; font-size: 10px; }
+        .box-content { padding: 8px; background: white; }
+
+        .contact-links { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+        .contact-links a { font-size: 10px; color: #336699; display: flex; align-items: center; gap: 4px; padding: 2px 0; }
+
+        .url-box { font-size: 9px; border: 1px solid #ccc; border-radius: 3px; padding: 4px; background: #f9f9f9; word-break: break-all; color: #555; }
+
+        .profile-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .profile-table td { padding: 4px 6px; border: 1px solid #ddd; vertical-align: top; }
+        .profile-table td.label { background: #d1f9ec; font-weight: bold; width: 75px; color: #224466; }
+
+        .blurb-title { color: #ff6600; font-weight: bold; margin: 8px 0 4px; font-size: 12px; }
+        .blurb-text { font-size: 11px; line-height: 1.6; }
+
+        .blog-list { list-style: none; }
+        .blog-list li { border-bottom: 1px dotted #ccc; padding: 5px 0; font-size: 10px; }
+
+        .moreinformation { list-style: none; }
+        .moreinformation li { border-bottom: 1px dotted #ccc; padding: 4px 8px; font-size: 10px; line-height: 1.6; }
+
+        .yt-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 4px; }
+        .yt-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        .friends-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+        .friend-item { text-align: center; width: 58px; }
+        .friend-avatar {
+            width: 50px; height: 50px; background: #d1f9ec;
+            border: 1px solid #4477aa; border-radius: 4px;
+            margin: 0 auto 3px; display: flex;
+            align-items: center; justify-content: center; font-size: 22px;
+            overflow: hidden;
+        }
+        .friend-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .friend-item a { font-size: 9px; }
+
+        .comments-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .comments-table td { padding: 6px; border: 1px solid #ddd; vertical-align: top; }
+        .comment-avatar {
+            width: 40px; height: 40px; background: #d1f9ec;
+            border: 1px solid #6699cc; border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; margin: 0 auto 3px;
+            overflow: hidden;
+        }
+        .comment-avatar img { 
+            width: 100%; height: 100%; object-fit: cover; }
+        .comment-username { font-weight: bold; color: #336699; font-size: 10px; display: block; text-align: center; }
+        .comment-date { font-size: 9px; color: #888; display: block; margin-bottom: 3px; }
+        .comment-text { line-height: 1.5; }
+        .comment-reply { font-size: 9px; color: #6699cc; font-style: italic; margin-top: 4px; }
+
+        .footer {
+            text-align: center; font-size: 10px; color: #888;
+            margin: 6px 0 14px; padding-top: 6px; border-top: 1px solid #ccc;
+        }
+        .footer a { color: #6699cc; margin: 0 4px; }
+
+       @media (max-width: 600px) {
+            .container { flex-direction: column; margin: 8px; padding: 12px; }
+            .left-col { width: 100%; }
+            .profile-pic { height: 180px; }
+            .contact-links { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 400px) {
+            .profile-name { font-size: 18px; }
+            .contact-links { grid-template-columns: 1fr; }
+        }
+    
+        /* ===== 통일 규칙 (자동 적용) ===== */
+        .profile-pic {
+            aspect-ratio: 1 / 1 !important;
+            height: auto !important;
+            width: 100% !important;
+        }
+        .profile-pic img { object-fit: cover !important; }
+
+        .topbar .logo {
+            font-size: 25px !important;
+            font-weight: 600 !important;
+            font-family: 'Galmuri9', sans-serif !important;
+            font-style: normal !important;
+            color: #336699 !important;
+            padding: 0 !important;
+            line-height: 1.2 !important;
+            letter-spacing: -1px !important;
+        }
+        .profile-name {
+            font-size: 25px !important;
+            font-weight: bold !important;
+            margin-bottom: 8px !important;
+            font-family: Georgia, serif !important;
+        }
+
+        .blurb-text { line-height: 1.6 !important; letter-spacing: 0.01em !important; }
+        .profile-table td, .zollamanprofile td, .bboongprofile td, .mongyiprofile td {
+            line-height: 1.5 !important;
+            letter-spacing: 0.01em !important;
+        }
+        .comment-text { line-height: 1.6 !important; letter-spacing: 0.01em !important; }
+        .moreinformation li { line-height: 1.6 !important; letter-spacing: 0.01em !important; }
+        .blog-list li { line-height: 1.5 !important; letter-spacing: 0.01em !important; }
+
+        /* RESPONSIVE 통일 */
+        @media (max-width: 900px) {
+            .right-wrap { flex-direction: column !important; }
+            .far-col { width: 100% !important; }
+        }
+        @media (max-width: 600px) {
+            .container { flex-direction: column !important; margin: 8px !important; padding: 12px !important; }
+            .left-col { width: 100% !important; min-width: 0 !important; }
+            .right-wrap { flex-direction: column !important; }
+            .far-col { width: 100% !important; }
+            .blurb-text { font-size: 10px !important; }
+        }
+        @media (max-width: 400px) {
+            .profile-name { font-size: 18px !important; }
+            .contact-links { grid-template-columns: 1fr !important; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">2000년대 캐릭터</div>
+    <a href="index.html" class="back-btn">← 돌아가기</a>
+</div>
+
+<div class="container">
+
+    <!-- 왼쪽: 프로필 -->
+    <div class="left-col">
+        <div class="profile-name">양파쿵야</div>
+
+        <div class="profile-pic">
+            <img src="yangpakoongya.webp" alt="양파쿵야">
+        </div>
+
+        <div class="status-quote">"이름! 양파쿵야! 호기심 많고 낙천적인 레스토랑의 사고뭉치!"</div>
+        <div class="meta-line"><span class="online-dot"></span>Last active: 쿵야레스토랑에서 요리 중</div>
+        <div class="meta-line"><b>Mood:</b> 근거 없는 자신감 충만</div>
+
+        <div class="box">
+            <div class="box-header">최근 게시물</div>
+            <div class="box-content">
+                <ul class="blog-list">
+                    <li>주먹밥, 너 정말 떠날 거냐?!</li>
+                    <li>제일 잘하는 요리는 김장김치라구!</li>
+                    <li>무지개 떡 먹고 싶다</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header">More Information...</div>
+            <div class="box-content">
+                <ul class="moreinformation">
+                    <li> 2003년 넷마블 게임 야채부락리에서 첫 등장한 양파쿵야는 쿵야 레스토랑에서 일하는 요리사 대표로, 보라빛 양배추를 모티브로 디자인되었다. 호기심 많고 낙천적인 성격에 사고뭉치 캐릭터성이 더해져 작중에서 크게 활약한다. 개그 캐릭터로 자리매김했지만 동료들 말에 따르면 이 작품의 실질적인 주인공이라고 한다. 친구들이 떠나려 할 때마다 회유와 협박을 동원해서라도 붙잡으려는 모습에서 깊은 동료애가 느껴지는 캐릭터다.
+                    넷마블의 마케팅 자회사 엠엔비는 지난해 4월 쿵야 IP를 활용해 새 콘텐츠 브랜드인 쿵야 레스토랑즈를 새로 선보였다. 주방장 캐릭터인 ‘양파쿵야’가 불의의 사고로 냉장고에 갇혔다가 깨어나 레스토랑을 재건한다는 이야기로 부활의 명분을 만들었다. 양파쿵야가 무성의한 말투로 직장 생활의 고단함을 토로하는 모습은 인터넷 밈으로 재생산되기도 했다.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 오른쪽 -->
+    <div class="right-col">
+
+        <div class="box">
+            <div class="box-header">프로필</div>
+            <div class="box-content">
+                <table class="profile-table">
+                    <tr><td class="label">이름</td><td>양파쿵야 Onion Koongya</td></tr>
+                    <tr><td class="label">유형</td><td>비인간형 (채소)</td></tr>
+                    <tr><td class="label">소속</td><td>쿵야 레스토랑 요리사 대표</td></tr>
+                    <tr><td class="label">성격</td><td>호기심 많고 낙천적, 동료애 깊은 사고뭉치</td></tr>
+                    <tr><td class="label">특기</td><td>얼굴 표정으로 웃기기, 미칠 듯한 언변, 각종 패러디</td></tr>
+                    <tr><td class="label">잘하는 요리</td><td>김장김치</td></tr>
+                    <tr><td class="label">좋아하는 것</td><td>무지개 떡</td></tr>
+                    <tr><td class="label">단점</td><td>요리를 정말 못하는데 본인은 프로급이라고 자칭함, 잘못해도 반성 안 함</td></tr>
+                    <tr><td class="label">장점</td><td>엄청난 낙천주의자, 친구를 절대 포기하지 않는 동료애</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header">내 정보</div>
+            <div class="box-content">
+                <div class="blurb-title">About me:</div>
+                <p class="blurb-text">밝고 쾌활한 양파 쿵야는 남에게 인정받는데 집착해요. 이는 어린 시절, 다른 논발에서 자란 트라우마 때문인데요. 솔직하고 매력 넘치는 까도남이지만, 의외로 비밀이 많아보이네요!</p>
+                
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header">방명록</div>
+            <div class="box-content">
+                <table class="comments-table">
+                    <tr>
+                        <td style="width:55px;text-align:center;">
+                            <div class="comment-avatar"><img src="joomukbap.webp" alt="주먹밥쿵야"></div>
+                            <a class="comment-username" href="#">주먹밥<br>쿵야</a>
+                        </td>
+                        <td>
+                            <span class="comment-date">2003-05-12</span>
+                            <p class="comment-text"></p>이름, 주먹밥쿵야! 양파쿵야를 사부로 모시고 일하는 착하고 성실한 막내!
+                            <p class="comment-reply">→ 무척 순수하고 천진난만. 집 밖에 나가는 걸 기본적으로 좋아하지 않음</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:55px;text-align:center;">
+                            <div class="comment-avatar"><img src="sll.webp" alt="샐러리쿵야"></div>
+                            <a class="comment-username" href="#">샐러리<br>쿵야</a>
+                        </td>
+                        <td>
+                            <span class="comment-date">2004-01-20</span>
+                            <p class="comment-text">이름~ 샐러리쿵야! 우아하게 살고 싶지만 되는 게 없는 레스토랑의 매니저!</p>
+                            <p class="comment-reply">→ 쿵야 레스토랑의 매니저 및 총책임자. 전체적으로 드세고 화를 잘 내는 성격이다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:55px;text-align:center;">
+                            <div class="comment-avatar"><img src="wankye.webp" alt="완계쿵야"></div>
+                            <a class="comment-username" href="#">완계쿵야</a>
+                        </td>
+                        <td>
+                            <span class="comment-date">2004-06-08</span>
+                            <p class="comment-text">이름~ 완계쿵야! 배달 나가면 돌아올 줄 모르는 레스토랑의 터프한 철가방</p>
+                            <p class="comment-reply">→ 초기의 쿵야 레스토랑 운영 멤버. 통찰력과 분위기 파악에 뛰어나지만 표현이 서툴러 아무도 눈치를 채지 못한다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:55px;text-align:center;">
+                            <div class="comment-avatar"><img src="hobak.webp" alt="호박쿵야"></div>
+                            <a class="comment-username" href="#">호박쿵야</a>
+                        </td>
+                        <td>
+                            <span class="comment-date">2005-03-02</span>
+                            <p class="comment-text">이름~ 호박쿵야! 정직함과 성실성으로 레스토랑의 궂은일을 맡아 하는 살림꾼!</p>
+                            <p class="comment-reply">→ 쿵야 레스토랑의 웨이터. 쿵야 캐치마인드의 기본 쿵야 </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header">양파쿵야's Friend Space</div>
+            <div class="box-content">
+                <div class="friends-grid">
+                    <div class="friend-item"><div class="friend-avatar"><img src="joomukbap.webp" alt="주먹밥쿵야"></div><a href="#">주먹밥쿵야</a></div>
+                    <div class="friend-item"><div class="friend-avatar"><img src="sll.webp" alt="샐러리쿵야"></div><a href="#">샐러리쿵야</a></div>
+                    <div class="friend-item"><div class="friend-avatar"><img src="hobak.webp" alt="호박쿵야"></div><a href="#">호박쿵야</a></div>
+                    <div class="friend-item"><div class="friend-avatar"><img src="busut.webp" alt="버섯쿵야"></div><a href="#">버섯쿵야</a></div>
+                    <div class="friend-item"><div class="friend-avatar"><img src="wankye.webp" alt="완계쿵야"></div><a href="#">완계쿵야</a></div>
+                    <div class="friend-item"><div class="friend-avatar"><img src="bankye.webp" alt="반계쿵야"></div><a href="#">반계쿵야</a></div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
